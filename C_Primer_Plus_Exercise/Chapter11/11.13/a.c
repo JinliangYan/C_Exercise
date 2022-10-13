@@ -22,6 +22,20 @@ int main(void)
 
 void del_str_space(char * str)
 {
+    char * pstr = str;
+    while (*pstr)
+    {
+        if (! isspace(*pstr))
+            *str++ = *pstr++;
+        else
+            pstr++;
+    }
+    *str = '\0';
+}
+//↓可改进如上↑
+/*
+void del_str_space(char * str)
+{
     char tmp[STLEN];
     char * ptmp = tmp;
     char * pstr = str;
@@ -39,6 +53,7 @@ void del_str_space(char * str)
     }
     *str = '\0';
 }
+*/
 
 char * s_gets(char * Buffer, int maxCount)
 {
