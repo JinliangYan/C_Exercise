@@ -1,3 +1,5 @@
+/*从输入中获取n个字符（包括空白，制表符，换行符），把结果储存在一个数组里，它的地址被传递作为一个参数*/
+
 #include <stdio.h>
 #include <string.h>
 #define STLEN 15
