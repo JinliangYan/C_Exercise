@@ -23,10 +23,17 @@ int main(void){
     return 0;
 }
 
-char * mystrchr(char *str, char ch){
-    while (*str){
-        if (ch == *str++ && *str) {
-            return str - 1;
+char *mystrchr(char *str, char ch)
+{
+    while (*str != '\0')
+    {
+        if (*str != ch)
+        {
+            ++str;
+        }
+        else
+        {
+            return str;
         }
     }
     return NULL;
