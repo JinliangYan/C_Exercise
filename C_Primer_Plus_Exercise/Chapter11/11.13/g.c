@@ -5,7 +5,7 @@
 
 int my_atoi(char str[]);
 int main(void){
-    int a = my_atoi("123");
+    int a = my_atoi("3");
     printf("%d", a);
     return 0;
 }
@@ -21,20 +21,21 @@ int my_atoi(char str[]){
         if (*str == '\0')
             return 0;
     }
+    str--;
 /*检查是否有非数字，
  * 小数点只能有一个,
  * 并且记录数字个数↓*/
     while (str[ct]){
         if (str[ct] == '.'){
-            str++;
+            str++; //           NUGNUGUNOKNFoak' sdgoisdp 我日 bug原因 在这！！！！！！！！！！！！！！！！！！！！！！
             point_num++;
         }
-        if (!isdigit(str[ct])|| point_num > 1){
+        else if (!isdigit(str[ct])|| point_num > 1){
             return 0;
         }
         else{
             if (point_num < 1)
-                ct++;
+                ++ct;
         }
     }
     /*前面为了跳过小数点，指针+1，
