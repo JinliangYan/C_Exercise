@@ -65,7 +65,9 @@ void operate(char **command, char *text){
     puts(start);
 }
 
-/*改进版本*/
+/*改进版本
+    原来toupper()等遇到非字母会返回原来值的
+*/
 #include <stdio.h>
 #include <ctype.h>
 
