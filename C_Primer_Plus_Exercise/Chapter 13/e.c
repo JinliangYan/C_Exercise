@@ -21,96 +21,103 @@
 0 0 0 0 0 0 0 0 0 0 0 0 5 8 9 9 8 5 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 5 8 9 9 8 5 0 0 0 0 0 0 0 0 0 0 0 0
 */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#define FIL_NAM "text"
-
-void rm_distortion(int rows, int cols, int num[rows][cols]);
+#define ROWS 20
+#define COLS 30
+#define LEVELS 10
+const char trans[LEVELS + 1] = " .':~*=&%#"; //存储需要转换的字符;
+char * s_gets(char * Buffer, int maxCount);
+int clean_distortion(int (*num)[COLS], int x, int y);
+void change(int (*num)[COLS]);
 int main(void) {
-    FILE *text;
-    int ch, rows = 0, cols;
-    int *pt;
-    int ct = 0;
-    if ((text = fopen(FIL_NAM, "r")) == NULL) {
-        fprintf(stderr, "Failed to open %s!", FIL_NAM);
+    FILE *f;
+    int num[ROWS][COLS];
+    char file_name[FILENAME_MAX];
+    printf("Please enter the file name: ");
+    s_gets(file_name, FILENAME_MAX);
+    if ((f = fopen(file_name, "r")) == NULL) {
+        fprintf(stderr, "Failed to open %s!", file_name);
+        exit(EXIT_FAILURE);
+    }
+    /*将文本转换成数字↓*/
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            fscanf(f, "%d", &num[i][j]);
+        }
+    }
+    if (ferror(f)) {
+        fprintf(stderr, "Error! Exiting...\n");
         exit(EXIT_FAILURE);
     }
 
-    /*计算行列数*/
-    while ((ch = getc(text)) != EOF) {
-        if (isdigit(ch)) {
-            ct++;
-        } else if (ch == '\n') {
-            rows++;
-        }
-    }
-    rows++;
-    cols = ct / rows;
-    int num[rows][cols];
-    pt = num[0];
-    /*文件指针回到开头*/
-    rewind(text);
-
-    /*文件中的数字字符。
-     * 转换为数字↓*/
-    while ((ch = getc(text)) != EOF) {
-        if (isdigit(ch)) {
-            *pt++ = ch - '0';
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            num[i][j] = clean_distortion(num, i, j);
         }
     }
 
-    if (fclose(text) == EOF) {
-        fprintf(stderr, "Can't close %s.", FIL_NAM);
-        exit(EXIT_FAILURE);
-    }
+    change(num);
 
-    /*消除失真*/
-    rm_distortion(rows, cols, num);
-
-    /*打印输出图像↓*/
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            switch (num[i][j]) {
-                case 0:
-                    putchar(' ');
-                    break;
-                case 1:
-                    putchar('.');
-                    break;
-                case 3:
-                    putchar('_');
-                    break;
-                case 4:
-                    putchar('=');
-                    break;
-                case 5:
-                    putchar('*');
-                    break;
-                case 6:
-                    putchar('%');
-                    break;
-                case 7:
-                    putchar('$');
-                    break;
-                case 8:
-                    putchar('@');
-                    break;
-                default:
-                    putchar('#');
-            }
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            putchar(num[i][j]);
         }
         putchar('\n');
     }
+
+    if (fclose(f) == EOF) {
+        fprintf(stderr, "Can't close %s.", file_name);
+        exit(EXIT_FAILURE);
+    }
+
     return 0;
 }
 
-void rm_distortion(int rows, int cols, int num[rows][cols]) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (abs(num[i][j] - num[i - 1][j]) > 1 && abs(num[i][j] - num[i][j - 1]) > 1 && abs(num[i][j] - num[i][j + 1]) > 1 && abs(num[i][j] - num[i + 1][j]) > 1) {
-                num[i][j] = (int)((double)(num[i - 1][j] + num[i][j - 1] + num[i][j + 1] + num[i + 1][j]) / 4 + 0.5);
-            }
+int clean_distortion(int (*num)[COLS], int x, int y) {
+    int d[4][2] = {{1,0},
+                   {0,1},
+                   {-1,0},
+                   {0,-1}};
+    int sum = 0, cnt = 0;
+    int status = cnt;
+    int dx, dy;
+    for (int i = 0; i < 4; i++) {
+        dx = x + d[i][0];
+        dy = y + d[i][1];
+        if (dx < 0 || dx > ROWS - 1 || dy < 0 || dy > COLS - 1) continue;
+        status++;
+        if (abs(num[dx][dy] - num[x][y]) > 1) {
+            sum += num[dx][dy];
+            cnt++;
         }
     }
+    if (status != cnt)
+        return num[x][y];
+    return (int)((double)sum / cnt + 0.5);
+}
+
+void change(int (*num)[COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            num[i][j] = (int)trans[num[i][j]];
+        }
+    }
+}
+
+char * s_gets(char * Buffer, int maxCount){
+    char * ret_value;
+    ret_value = fgets(Buffer, maxCount, stdin);
+    if (ret_value){
+        //替换'\n'为'\0'
+        while (*Buffer != '\n' && *Buffer != '\0')
+            Buffer++;
+        if (*Buffer == '\n')
+            *Buffer = '\0';
+        else{
+            while (getchar() != '\n');
+        }
+    }
+    return ret_value;
 }
