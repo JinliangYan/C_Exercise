@@ -1,3 +1,9 @@
+/*
+要用到标准输入输出时，
+直接将fp = stdout/stdin
+不必像下面分情况多此一举。
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
