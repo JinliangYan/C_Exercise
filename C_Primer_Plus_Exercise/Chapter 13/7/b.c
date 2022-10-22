@@ -38,5 +38,8 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    if (fclose(f1) == EOF || fclose(f2) == EOF) {
+        fprintf(stderr, "Failed to close the files!");
+    }
     return 0;
 }
