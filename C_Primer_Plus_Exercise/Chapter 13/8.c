@@ -5,7 +5,7 @@
 void show_info(char seek, char *file_name);
 int main(int argc, char *argv[]) {
     if (argc < 2 || strlen(argv[1]) != 1) {
-        fprintf(stderr, "Usage: %s a_character [file]", argv[0]);
+        fprintf(stderr, "Usage: %s a_character [file]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
     int ch, ct = 0;
@@ -35,8 +35,8 @@ void show_info(char seek, char *file_name) {
     int ch;
     int ct = 0;
     if ((fp = fopen(file_name, "r")) == NULL) {
-        fprintf(stderr, "Failed to open %s", file_name);
-        exit(EXIT_FAILURE);
+        fprintf(stderr, "Failed to open %s\n", file_name);
+        return;
     }
     ch = getc(fp);
     while (ch != EOF) {
@@ -44,6 +44,9 @@ void show_info(char seek, char *file_name) {
             ct++;
         }
         ch = getc(fp);
+    }
+    if (fclose(fp) == EOF) {
+        fprintf(stderr, "Failed to close %s!\n", file_name);
     }
     printf("There are %d %c in %s.\n", ct, seek, file_name);
 }
