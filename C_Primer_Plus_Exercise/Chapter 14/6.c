@@ -55,11 +55,13 @@ void read_writ(FILE *info, PLAYER team[]) {
     int hit_num;
     int base_num;
     int rbi;
-    int status;
-    while ((status = fscanf(info, "%d %s %s %d %d %d %d", &id, fname, lname, &stage_num, &hit_num, &base_num, &rbi)) != EOF \
-    && status == 7 )
+    int ct = 0;
+    while (fscanf(info, "%d %s %s %d %d %d %d", &id, fname, lname, &stage_num, &hit_num, &base_num, &rbi) == 7 && !feof(info) && ct < PL_NUM)
     {
         team[id].id = id, team[id].stage_num += stage_num, team[id].base_num += base_num, team[id].hit_num += hit_num, team[id].rbi += rbi;
+        /*球员信息为空则计数+1，
+         * 防止越界↓*/
+        if (team[id].stage_num == 0) ct++;
         if (team[id].fname[0] == '\0') {
             strcpy(team[id].fname, fname);
             strcpy(team[id].lname, lname);
