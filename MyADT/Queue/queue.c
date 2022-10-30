@@ -57,8 +57,9 @@ bool EnQueue(Item item, Queue * pq) {
 bool DeQueue(Item *pitem, Queue * pq) {
     if (QueueIsEmpty(pq))
         return false;
+    if (pitem)
+        CopyToItem(pq->front, pitem);
     Node *pt = pq->front;
-
     pq->front = pq->front->next;
     free(pt);
     pq->items--;
@@ -66,4 +67,11 @@ bool DeQueue(Item *pitem, Queue * pq) {
         pq->rear = NULL;
     }
     return true;
+}
+
+void EmptyTheQueue(Queue *pq) {
+    Item *pt;
+    while (pq->items) {
+        DeQueue(NULL, pq);
+    }
 }
