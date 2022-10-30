@@ -32,4 +32,6 @@ int QueueItemCount(const Queue *pq);
 bool EnQueue(Item item, Queue * pq);
 
 bool DeQueue(Item *pitem, Queue * pq);
+
+void EmptyTheQueue(Queue *pq);
 #endif //TEST_C_QUEUE_H
