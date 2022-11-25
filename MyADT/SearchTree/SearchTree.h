@@ -10,13 +10,14 @@ typedef struct ElementType Item;
 typedef struct TreeNode *SearchTree;
 typedef struct TreeNode *Position;
 
-SearchTree MakeEmpty(SearchTree T);
+SearchTree MakeEmpty(SearchTree T);//初始化
 Position Find(Item item, SearchTree T);
 Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 SearchTree Insert(Item item, SearchTree T);
 SearchTree Delete(Item item, SearchTree T);
 Item Retrieve(Position position);
+void traverse(SearchTree T, void (*fp)(Item item));
 #endif //TREE_SEARCHTREE_H
 
 struct ElementType {
