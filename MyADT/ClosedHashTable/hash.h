@@ -21,9 +21,7 @@ struct hash_tbl {
     cell *the_cells;
 };
 typedef struct hash_tbl *HASH_TABLE;
-INDEX hash(element_type element, HASH_TABLE hashTable);
 HASH_TABLE initialized_table(unsigned int table_size);
-position find(element_type element, HASH_TABLE hashTable);
 void insert(element_type element, HASH_TABLE hashTable);
 void delete(element_type element, HASH_TABLE hashTable);
-#endif //EXERCISE_CLOSED_HASH_H
+#endif //EXERCISE_CLOSED_HASH_Hx
