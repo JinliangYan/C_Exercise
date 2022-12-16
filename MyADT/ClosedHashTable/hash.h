@@ -24,5 +24,5 @@ typedef struct hash_tbl *HASH_TABLE;
 HASH_TABLE hash_initialized(unsigned int table_size);
 HASH_TABLE hash_insert(element_type element, HASH_TABLE hashTable);
 HASH_TABLE  hash_delete(element_type element, HASH_TABLE hashTable);
-position find(element_type element, HASH_TABLE hashTable);
+position hash_find(element_type element, HASH_TABLE hashTable);
 #endif //EXERCISE_CLOSED_HASH_Hx
