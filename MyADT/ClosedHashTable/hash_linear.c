@@ -27,7 +27,7 @@ static INDEX hash(element_type element, HASH_TABLE hashTable) {
 }
 
 /*find the next empty spot(to insert) or element's position(to delete)*/
-static position find(element_type element, HASH_TABLE hashTable) {
+position find(element_type element, HASH_TABLE hashTable) {
     position current_pos = hash(element, hashTable), i = 0;
     while (hashTable->the_cells[current_pos].info != empty && element != hashTable->the_cells[current_pos].element) {
         current_pos += ++i;
