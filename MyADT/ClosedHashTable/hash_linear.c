@@ -81,7 +81,7 @@ HASH_TABLE hash_insert(element_type element, HASH_TABLE hash_table) {
     if (alpha >= 0.5) {
         hash_table = rehashing(hash_table);
     }
-    position current_pos = find(element, hash_table);
+    position current_pos = hash_find(element, hash_table);
     hash_table->the_cells[current_pos].element = element;
     hash_table->the_cells[current_pos].info = legitimate;
     hash_table->size++;
@@ -89,7 +89,7 @@ HASH_TABLE hash_insert(element_type element, HASH_TABLE hash_table) {
 }
 
 HASH_TABLE hash_delete(element_type element, HASH_TABLE hash_table) {
-    position current_pos = find(element, hash_table), i = 0;
+    position current_pos = hash_find(element, hash_table), i = 0;
     while (hash_table->the_cells[current_pos].info != legitimate || element != hash_table->the_cells[current_pos].element) {
         current_pos += ++i;
         if (current_pos >= hash_table->table_size)
