@@ -21,14 +21,20 @@ static unsigned int next_primer(unsigned size) {
         v_next++;
     }
 }
-INDEX hash(element_type element, HASH_TABLE hashTable) {
-    INDEX index = element % hashTable->table_size, i = 0;
-    while (hashTable->the_cells[index].info == legitimate) {
-        index += 2 * (++i) - 1;
-        if (index >= hashTable->table_size)
-            index -= hashTable->table_size;
+
+static INDEX hash(element_type element, HASH_TABLE hashTable) {
+    return element % hashTable->table_size;
+}
+
+/*find the next empty spot(to insert) or element's position(to delete)*/
+static position find(element_type element, HASH_TABLE hashTable) {
+    position current_pos = hash(element, hashTable), i = 0;
+    while (hashTable->the_cells[current_pos].info != empty && element != hashTable->the_cells[current_pos].element) {
+        current_pos += ++i * 2 - 1;
+        if (current_pos >= hashTable->table_size)
+            current_pos -= hashTable->table_size;
     }
-    return index;
+    return current_pos;
 }
 
 HASH_TABLE initialized_table(unsigned int table_size) {
@@ -50,33 +56,23 @@ HASH_TABLE initialized_table(unsigned int table_size) {
     return hashTable;
 }
 
-/*ignore the deleted cells*/
-position find(element_type element, HASH_TABLE hashTable) {
-    INDEX index = element % hashTable->table_size, i = 0;
-    while (hashTable->the_cells[index].info != empty && element != hashTable->the_cells[index].element) {
-        index += 2 * (++i) - 1;
-        if (index >= hashTable->table_size)
-            index -= hashTable->table_size;
-    }
-    return index;
-}
-
 void insert(element_type element, HASH_TABLE hashTable) {
     if (hashTable->table_size < ++hashTable->size) {
         fprintf(stderr, "Max item error!\n");
         return;
     }
-    hashTable->the_cells[hash(element, hashTable)].element = element;
-    hashTable->the_cells[hash(element, hashTable)].info = legitimate;
+    position current_pos = find(element, hashTable);
+    hashTable->the_cells[current_pos].element = element;
+    hashTable->the_cells[current_pos].info = legitimate;
 }
 
 void delete(element_type element, HASH_TABLE hashTable) {
-    INDEX index = find(element, hashTable), i = 0;
-    while (hashTable->the_cells[index].info != legitimate || element != hashTable->the_cells[index].element) {
-        index += 2 * (++i) - 1;
-        if (index >= hashTable->table_size)
-            index -= hashTable->table_size;
+    position current_pos = find(element, hashTable), i = 0;
+    while (hashTable->the_cells[current_pos].info != legitimate || element != hashTable->the_cells[current_pos].element) {
+        current_pos += ++i * 2 - 1;
+        if (current_pos >= hashTable->table_size)
+            current_pos -= hashTable->table_size;
     }
-    hashTable->the_cells[index].info = deleted;
+    hashTable->the_cells[current_pos].info = deleted;
     hashTable->size--;
 }
