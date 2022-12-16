@@ -24,7 +24,7 @@ static unsigned int next_primer(unsigned size) {
 INDEX hash(element_type element, HASH_TABLE hashTable) {
     INDEX index = element % hashTable->table_size, i = 0;
     while (hashTable->the_cells[index].info == legitimate) {
-        index = (element + ++i) % hashTable->table_size;
+        index += ++i;
         if (index >= hashTable->table_size)
             index -= hashTable->table_size;
     }
@@ -54,7 +54,7 @@ HASH_TABLE initialized_table(unsigned int table_size) {
 position find(element_type element, HASH_TABLE hashTable) {
     INDEX index = element % hashTable->table_size, i = 0;
     while (hashTable->the_cells[index].info != empty && element != hashTable->the_cells[index].element) {
-        index = (element + ++i) % hashTable->table_size;
+        index += ++i;
         if (index >= hashTable->table_size)
             index -= hashTable->table_size;
     }
@@ -71,7 +71,12 @@ void insert(element_type element, HASH_TABLE hashTable) {
 }
 
 void delete(element_type element, HASH_TABLE hashTable) {
-    INDEX index = find(element, hashTable);
+    INDEX index = find(element, hashTable), i = 0;
+    while (hashTable->the_cells[index].info != legitimate || element != hashTable->the_cells[index].element) {
+        index += ++i;
+        if (index >= hashTable->table_size)
+            index -= hashTable->table_size;
+    }
     hashTable->the_cells[index].info = deleted;
     hashTable->size--;
 }
