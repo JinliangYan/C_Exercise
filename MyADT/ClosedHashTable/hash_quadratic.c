@@ -96,3 +96,8 @@ HASH_TABLE hash_delete(element_type element, HASH_TABLE hash_table) {
     hash_table->size--;
     return hash_table;
 }
+
+void hash_destory(HASH_TABLE hash_table) {
+    free(hash_table->the_cells);
+    free(hash_table);
+}
