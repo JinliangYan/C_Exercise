@@ -1,82 +1,32 @@
 //
-// Created by JavaC on 2022/10/29.
+// Created by Kokomi on 2022/12/17.
 //
 
-#ifndef TEST_C_LIST_H
-#define TEST_C_LIST_H
-
-#endif //TEST_C_LIST_H
-
+#ifndef EXERCISE_LIST_H
+#define EXERCISE_LIST_H
 #include <stdbool.h>
+typedef int element_type;
 
-/*A program-specific declaration*/
-
-#define TSIZE 45 //储存电影名的数组大小
-struct film {
-    char title[TSIZE];
-    int rating;
+struct node {
+    element_type element;
+    struct node* next;
 };
+typedef struct node *node_ptr;
+typedef node_ptr LIST;
+typedef node_ptr cell;
+typedef node_ptr position;
 
-/*General type definition*/
-
-typedef struct film Item;
-
-typedef struct node {
-    Item item;
-    struct node *next;
-} Node;
-
-typedef Node * List;
-
-/*Function prototype*/
-
-/**
- * Initialize a linked list
- * @param pList The linked list's pointer to be initialized
- * The linked list is initialized empty.
- */
-void InitializeList(List * pList);
-
-/**
- * Determine if a linked list is empty.
- * @param pList points to an initialized linked list you want to judge.
- * @return If the list is empty, return true, else return false.
- */
-bool ListIsEmpty(const List * pList);
-
-/**
- * Determine if a linked list is full
- * @param pList points to an initialized linked list you want to judge.
- * @return If the list is full return true, else return false.
- */
-bool ListIsFull(const List * pList);
-
-/**
- *Determine the number of items in the linked list
- * @param pList points to an initialized linked list you want to count.
- * @return The number of items in the linked list.
- */
-unsigned int ListItemCount(const List * pList);
-
-/**
- *Add an item at the end of the linked list.
- * @param item
- * @param pList An initialized linked list.
- * @return If the addition is successful, it returns true, else return false.
- */
-bool AddItem(Item item, List * pList);
-
-/**
- * Apply the function to each item in the linked list.
- * @param pList An pointer to the initialized linked list.
- * @param pfun The function accepts an argument of type item and has no return value.
- */
-void Traverse(const List *pList, void(*pfun)(Item item));
-
-/**
- * Free allocated memory.
- * @param pList An pointer to the initialized linked list.
- */
-void EmptyTheList(List *pList);
-
-static void CopyToNode(Item item, Node * pnode);
+LIST list_initialize();
+bool list_is_empty(LIST list);
+bool list_is_last(position position, LIST list);
+bool list_is_initialized(LIST list);
+position list_find(element_type element, LIST list);
+void list_delete(element_type element, LIST list);
+position list_find_previous(element_type element, LIST list);
+void list_insert(element_type element, LIST list, position p);
+void delete_list(LIST *list);
+position list_get_header(LIST list);
+position list_get_first(LIST list);
+position list_get_next(position p);
+position list_get_previous(position p, LIST list);
+#endif //EXERCISE_LIST_H
