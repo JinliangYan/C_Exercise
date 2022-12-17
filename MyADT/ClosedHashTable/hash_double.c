@@ -36,12 +36,8 @@ static HASH_TABLE rehashing(HASH_TABLE hash_table_old) {
     for (int i = 0; i < hash_table_old->size; ++i) {
         if (hash_table_old->the_cells[i].info == legitimate) {
             hash_insert(hash_table_old->the_cells[i].element, hash_table_new);
-            hash_table_old->the_cells[i].info = legitimate;
-        } else {
-            hash_table_old->the_cells[i].info = empty;
         }
     }
-    hash_table_new->size = hash_table_old->size;
     free(hash_table_old->the_cells);
     free(hash_table_old);
     return hash_table_new;
