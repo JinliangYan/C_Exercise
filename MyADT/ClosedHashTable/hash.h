@@ -25,4 +25,6 @@ HASH_TABLE hash_initialized(unsigned int table_size);
 HASH_TABLE hash_insert(element_type element, HASH_TABLE hashTable);
 HASH_TABLE hash_delete(element_type element, HASH_TABLE hashTable);
 position hash_find(element_type element, HASH_TABLE hashTable);
+void hash_destory(HASH_TABLE H);
+
 #endif //EXERCISE_CLOSED_HASH_Hx
