@@ -6,7 +6,10 @@
 #include <stdbool.h>
 #include "list.h"
 #include "fatal.h"
+
 #define INITIALIZED 1
+#define DEFAULT 0
+
 static bool initialize_test(LIST list) {
     if (false == list_is_initialized(list)) {
         error("The list haven't been initialized!\n");
@@ -25,7 +28,6 @@ LIST list_initialize() {
     list = header;
     return list;
 }
-
 element_type list_retrieve(position p) {
     if (p != NULL)
         return p->element;
@@ -38,16 +40,19 @@ bool list_is_empty(LIST list) {
         return list->next ? true : false;
     return false;
 }
+
 bool list_is_last(position position, LIST list) {
     if (initialize_test(list))
         return position->next ? true : false;
     return false;
 }
+
 bool list_is_initialized(LIST list) {
     if (list == NULL || list->element != INITIALIZED)
         return false;
     return true;
 }
+
 /**
  * Find the element's position in the list(is pointer).
  * @param element
@@ -65,6 +70,7 @@ position list_find(element_type element, LIST list) {
     }
     return NULL;
 }
+
 /**
  * Remove this element from the list.
  * @param element
@@ -82,11 +88,11 @@ void list_delete(element_type element, LIST list) {
 position list_find_previous(element_type element, LIST list) {
     position next = list_find(element, list); /*here have an initialized test*/
     position previous = list;
-
     while (previous != NULL && previous->next != next)
         previous = previous->next;
     return previous;
 }
+
 /**
  * Insert the element in the list (after the position p).
  * @param element
@@ -106,6 +112,7 @@ void list_insert(element_type element, LIST list, position p) {
             error("Position is NULL!\n");
     }
 }
+
 /**
  * Delete the list and set the value to NULL.
  * @param list the pointer of a list.
@@ -122,7 +129,6 @@ void delete_list(LIST *list) {
         *list = NULL;
     }
 }
-
 /**
  * @param list
  * @return -1 if the list isn't initialized.
@@ -143,17 +149,46 @@ position list_get_header(LIST list) {
         return list;
     return NULL;
 }
+
 position list_get_first(LIST list) {
     if (initialize_test(list))
         return list->next;
     return NULL;
 }
+
 position list_get_next(position p) {
     if (p != NULL)
         return p->next;
     error("The position is NULL!\n");
     return NULL;
 }
+
+position list_nget_next(position p, unsigned int n) {
+    if (p != NULL) {
+        while (p != NULL && n-- != -1) {
+            p = p->next;
+        }
+        return p;
+    }
+    error("The position is NULL!\n");
+    return NULL;
+}
+/**
+ *
+ * @param list
+ * @param n Target position.
+ * @return The last position if out of range. NULL if error.
+ */
+position list_jump_to(LIST list, unsigned int n) {
+    if (initialize_test(list)) {
+        position p = list;
+        while (p->next != NULL && n-- != -1)
+            p = p->next;
+        return p;
+    }
+    return NULL;
+}
+
 /**
  * @param p Can be NULL.
  * @param list
