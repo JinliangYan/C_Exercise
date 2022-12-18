@@ -31,5 +31,6 @@ position list_get_header(LIST list);
 position list_get_first(LIST list);
 position list_get_next(position p);
 position list_nget_next(position p, unsigned int n);
+position list_jump_to(LIST list, unsigned int n);
 position list_get_previous(position p, LIST list);
 #endif //EXERCISE_LIST_H
