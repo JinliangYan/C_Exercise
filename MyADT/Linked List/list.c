@@ -26,6 +26,13 @@ LIST list_initialize() {
     return list;
 }
 
+element_type list_retrieve(position p) {
+    if (p != NULL)
+        return p->element;
+    error("Position is NULL!\n");
+    return DEFAULT; //defined as 0
+}
+
 bool list_is_empty(LIST list) {
     if (initialize_test(list))
         return list->next ? true : false;
@@ -115,6 +122,22 @@ void delete_list(LIST *list) {
         *list = NULL;
     }
 }
+
+/**
+ * @param list
+ * @return -1 if the list isn't initialized.
+ */
+size_t list_get_size(LIST list) {
+    if (initialize_test(list)) {
+        size_t size = 0;
+        node_ptr tmp = list;
+        while ((tmp = tmp->next) != NULL)
+            size++;
+        return size;
+    }
+    return -1;
+}
+
 position list_get_header(LIST list) {
     if (initialize_test(list))
         return list;
