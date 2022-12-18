@@ -17,6 +17,7 @@ typedef node_ptr cell;
 typedef node_ptr position;
 
 LIST list_initialize();
+element_type list_retrieve(position p);
 bool list_is_empty(LIST list);
 bool list_is_last(position position, LIST list);
 bool list_is_initialized(LIST list);
@@ -25,6 +26,7 @@ void list_delete(element_type element, LIST list);
 position list_find_previous(element_type element, LIST list);
 void list_insert(element_type element, LIST list, position p);
 void delete_list(LIST *list);
+size_t list_get_size(LIST list);
 position list_get_header(LIST list);
 position list_get_first(LIST list);
 position list_get_next(position p);
