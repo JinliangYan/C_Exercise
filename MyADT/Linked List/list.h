@@ -4,6 +4,7 @@
 
 #ifndef EXERCISE_LIST_H
 #define EXERCISE_LIST_H
+#define END_POS NULL
 #include <stdbool.h>
 typedef int element_type;
 
