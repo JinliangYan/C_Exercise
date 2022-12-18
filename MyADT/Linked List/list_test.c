@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "list.h"
+#include <time.h>
+void print_lots(LIST L, LIST P);
+LIST get_overlap(LIST list1, LIST list2);
+LIST get_union(LIST list1, LIST list2);
+int main(void) {
+    srand((unsigned int) time(NULL));
+    LIST L, P;
+    L = list_initialize();
+    P = list_initialize();
+    position position_p = list_get_header(P);
+    for (int i = 0; i < 5; ++i) {
+        list_insert(i, P, position_p);
+        position_p = list_get_next(position_p);
+    }
+    position_p = list_get_header(L);
+    for (int i = 0; i < 10; ++i) {
+        list_insert(i, L, position_p);
+        position_p = list_get_next(position_p);
+    }
+    LIST list = get_union(L, P);
+    return 0;
+}
+
+void print_lots(LIST L, LIST P) {
+    clock_t start = clock();
+    position position_1 = list_get_first(P);
+    while (position_1->next != NULL) {
+        printf("%d\n", list_retrieve(list_nget_next(L, list_retrieve(position_1))));
+        position_1 = position_1->next;
+    }
+    clock_t finish = clock();
+    printf("Run time: %ld\n", finish - start);
+}
+
+LIST get_overlap(LIST list1, LIST list2) {
+//    clock_t start = clock();
+    LIST overlap_list = list_initialize();
+    position p1 = list_get_first(list1);
+    position p2 = list_get_first(list2);
+//    position p3 = list_get_first(overlap_list); will cause an insertion error: list_insert(tmp, overlap_list,p3);
+    position p3 = list_get_header(overlap_list);
+    element_type tmp;
+    while (p1 != END_POS) {
+        tmp = list_retrieve(p1);
+        while (p2 != END_POS && list_retrieve(p2) != tmp)
+            p2 = list_get_next(p2);
+        if (p2 == END_POS)
+            break;
+        list_insert(tmp, overlap_list,p3);
+        p1 = list_get_next(p1);
+        p3 = list_get_next(p3);
+    }
+//    clock_t finish = clock();
+//    printf("Run time: %ld\n", finish - start);
+    return overlap_list;
+}
+
+LIST get_union(LIST list1, LIST list2) {
+    position p1, p2, p3, tmp_p;
+    element_type key;
+    LIST union_list = list_initialize();
+    p1 = list_get_first(list1);
+    p2 = list_get_first(list2);
+    p3 = list_get_header(union_list);
+    while (p1 != END_POS) {
+        if (p2 != NULL && list_retrieve(p2) < list_retrieve(p1)) {
+            /*Ensure that p1 is smaller*/
+            tmp_p = p1;
+            p1 = p2;
+            p2 = tmp_p;
+        }
+        key = list_retrieve(p1);
+        list_insert(key, union_list, p3);
+        p1 = list_get_next(p1);
+        p2 = list_get_next(p2);
+        p3 = list_get_next(p3);
+    }
+    return union_list;
+}
