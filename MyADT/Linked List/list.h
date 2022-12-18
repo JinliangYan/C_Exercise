@@ -14,7 +14,7 @@ struct node {
 typedef struct node *node_ptr;
 typedef node_ptr LIST;
 typedef node_ptr cell;
-typedef node_ptr position;
+typedef node_ptr position;/*header's position is -1*/
 
 LIST list_initialize();
 element_type list_retrieve(position p);
@@ -30,5 +30,6 @@ size_t list_get_size(LIST list);
 position list_get_header(LIST list);
 position list_get_first(LIST list);
 position list_get_next(position p);
+position list_nget_next(position p, unsigned int n);
 position list_get_previous(position p, LIST list);
 #endif //EXERCISE_LIST_H
