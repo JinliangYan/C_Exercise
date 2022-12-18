@@ -9,6 +9,7 @@
 
 #define INITIALIZED 1
 #define DEFAULT 0
+#define END_POS NULL
 
 static bool initialize_test(LIST list) {
     if (false == list_is_initialized(list)) {
