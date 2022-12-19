@@ -11,25 +11,30 @@ int main(void) {
     L = list_initialize();
     P = list_initialize();
     position position_p = list_get_header(P);
-    for (int i = 0; i < 20; i += 2) {
+    for (int i = 1; i < 10; i+=2) {
         list_insert(i, P, position_p);
         position_p = list_get_next(position_p);
     }
     position_p = list_get_header(L);
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; i++) {
         list_insert(i, L, position_p);
         position_p = list_get_next(position_p);
     }
     LIST list = get_union(L, P);
+    print_lots(L, P);
     return 0;
 }
 
 void print_lots(LIST L, LIST P) {
-    position position_1 = list_get_first(P);
-    while (position_1->next != NULL) {
-        printf("%d\n",
-               list_retrieve(list_nget_next(L, list_retrieve(position_1))));
-        position_1 = position_1->next;
+    position position_1 = list_get_first(L);
+    position position_2 = list_get_first(P);
+    int counter = 1;
+    while (position_2 != END_POS && position_1 != END_POS) {
+        if (list_retrieve(position_2) == counter++) {
+            printf("%d ", list_retrieve(position_1));
+            position_2 = list_get_next(position_2);
+        }
+        position_1 = list_get_next(position_1);
     }
 }
 
@@ -92,6 +97,7 @@ LIST get_union(LIST list1, LIST list2) {
     while (p1 != END_POS) {
         list_insert(list_retrieve(p1), union_list, p3);
         p3 = list_get_next(p3);
+
         p1 = list_get_next(p1);
     }
     while (p2 != END_POS) {
